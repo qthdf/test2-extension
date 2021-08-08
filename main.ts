@@ -292,14 +292,14 @@ namespace ICbit {
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
     //% subcategory=执行器
-    export function ledBrightness(pin: AnalogPin, colorUnit: LED, ledstate: boolean, brightness: number = 1023): void {
+    export function ledBrightness(pin: AnalogPin, colorUnit: LED, ledstate: boolean, brightness: number = 0): void {
         if (ledstate) {
             pins.analogSetPeriod(pin, 1023)
-            pins.analogWritePin(pin, Math.map(brightness, 1023, 0, 0, 1023))
+            pins.analogWritePin(pin, 1023 - brightness)
         }
         else {
-            pins.analogWritePin(pin, 0)
-            brightness = 0
+            pins.analogWritePin(pin, 1023 - brightness)
+            brightness = 1023
         }
     }
 
