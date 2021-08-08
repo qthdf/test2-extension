@@ -3,6 +3,14 @@
  * Read more at https://pxt.microbit.org/blocks/custom
  */
 
+enum PingUnit {
+    //% block="微秒"
+    MicroSeconds,
+    //% block="厘米"
+    Centimeters,
+    //% block="英寸"
+    Inches
+}
 
 enum TMP36Type {
     //% block="(℃)" enumval=0
@@ -252,34 +260,27 @@ namespace ICbit {
     /**
     * get Ultrasonic distance
     */
-    //% blockId=sonarbit block="超声波传感器 引脚 %pinT 距离 %distance_unit"
+    //% blockId=sonarbit
     //% distance_unit.fieldEditor="gridpicker"
     //% distance_unit.fieldOptions.columns=2
     //% subcategory=传感器
-    export function ultrasoundSensor(pinT: DigitalPin, distance_unit: Distance_Unit_List): number {
-        pins.setPull(pinT, PinPullMode.PullNone)
-        pins.digitalWritePin(pinT, 0)
-        control.waitMicros(2)
-        pins.digitalWritePin(pinT, 1)
-        control.waitMicros(10)
-        pins.digitalWritePin(pinT, 0)
+    //% blockId=sonar_ping block="ping trig %trig echo %echo 单位 %unit"
+    export function ping(trig: DigitalPin, echo: DigitalPin, unit: PingUnit, maxCmDistance = 500): number {
+        // send pulse
+        pins.setPull(trig, PinPullMode.PullNone);
+        pins.digitalWritePin(trig, 0);
+        control.waitMicros(2);
+        pins.digitalWritePin(trig, 1);
+        control.waitMicros(10);
+        pins.digitalWritePin(trig, 0);
 
         // read pulse
-        let d = pins.pulseIn(pinT, PulseValue.High, 25000)
-        let distance = d * 9 / 6 / 58
+        const d = pins.pulseIn(echo, PulseValue.High, maxCmDistance * 58);
 
-        if (distance > 400) {
-            distance = 0
-        }
-        switch (distance_unit) {
-            case Distance_Unit_List.Distance_Unit_cm:
-                return Math.floor(distance)  //cm
-                break
-            case Distance_Unit_List.Distance_Unit_inch:
-                return Math.floor(distance / 254)   //inch
-                break
-            default:
-                return 0
+        switch (unit) {
+            case PingUnit.Centimeters: return Math.idiv(d, 58);
+            case PingUnit.Inches: return Math.idiv(d, 148);
+            default: return d;
         }
     }
 
@@ -294,7 +295,7 @@ namespace ICbit {
     export function ledBrightness(pin: AnalogPin, colorUnit: LED, ledstate: boolean, brightness: number = 1023): void {
         if (ledstate) {
             pins.analogSetPeriod(pin, 1023)
-            pins.analogWritePin(pin, Math.map(brightness, 0, 1023, 0, 1023))
+            pins.analogWritePin(pin, Math.map(brightness, 1023, 0, 0, 1023))
         }
         else {
             pins.analogWritePin(pin, 0)
