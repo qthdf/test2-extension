@@ -1,3 +1,9 @@
+/**
+ * Use this file to define custom functions and blocks.
+ * Read more at https://pxt.microbit.org/blocks/custom
+ */
+
+
 enum TMP36Type {
     //% block="(℃)" enumval=0
     TMP36_temperature_C,
@@ -480,7 +486,7 @@ namespace ICbit {
         }
     }
 
-    //% blockId="ReadWaterLevel" block="水位传感器 %waterlevelpin"
+    //% blockId="octopus_ReadWaterLevel" block="水位传感器 %waterlevelpin"
     //% subcategory=传感器
     export function ReadWaterLevel(waterlevelpin: AnalogPin): number {
         let voltage = 0;
