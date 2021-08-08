@@ -487,7 +487,7 @@ namespace ICbit {
     }
 
     //% blockId="octopus_ReadWaterLevel" block="水位传感器 %waterlevelpin"
-    //% subcategory=传感器
+    //% subcategory=传感器 blockGap=30
     export function ReadWaterLevel(waterlevelpin: AnalogPin): number {
         let voltage = 0;
         let waterLevel = 0;
