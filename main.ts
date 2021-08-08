@@ -311,16 +311,17 @@ namespace ICbit {
     }
 
     export enum enServo {
-        P0 = 0,
-        P1,
-        P2,
-        P3
+        S1 = 0,
+        S2,
+        S3,
+        S4
     }
+
     export enum enMotors {
-        P0 = 8,
-        P1 = 10,
-        P2 = 13,
-        P3 = 15
+        M1 = 8,
+        M2 = 10,
+        M3 = 13,
+        M4 = 15
     }
 
     function i2cwrite(addr: number, reg: number, value: number) {
@@ -407,49 +408,41 @@ namespace ICbit {
 
     }
 
-    //% blockId=SuperBit_MotorRun block="电机 %index 切换至 $motorState || 速度 %speed"
+    //% blockId=SuperBit_MotorRun block="电机|%index|速度(-255~255) %speed"
     //% speed.min=-255 speed.max=255
-    //% motorState.shadow="toggleOnOff"
-    //% expandableArgumentMode="toggle"
     //% subcategory=执行器
-    export function MotorRun(index: enMotors, motorState: boolean, speed: number = 100): void {
+    export function MotorRun(index: enMotors, speed: number): void {
+        if (!initialized) {
+            initPCA9685()
+        }
+        speed = speed * 16; // map 255 to 4096
+        if (speed >= 4096) {
+            speed = 4095
+        }
+        if (speed <= -4096) {
+            speed = -4095
+        }
 
-        if (motorState) {
-            if (!initialized) {
-                initPCA9685()
-            }
-            speed = speed * 16; // map 255 to 4096
-            if (speed >= 4096) {
-                speed = 4095
-            }
-            if (speed <= -4096) {
-                speed = -4095
-            }
+        let a = index
+        let b = index + 1
 
-            let a = index
-            let b = index + 1
-
-            if (a > 10) {
-                if (speed >= 0) {
-                    setPwm(a, 0, speed)
-                    setPwm(b, 0, 0)
-                } else {
-                    setPwm(a, 0, 0)
-                    setPwm(b, 0, -speed)
-                }
-            }
-            else {
-                if (speed >= 0) {
-                    setPwm(b, 0, speed)
-                    setPwm(a, 0, 0)
-                } else {
-                    setPwm(b, 0, 0)
-                    setPwm(a, 0, -speed)
-                }
+        if (a > 10) {
+            if (speed >= 0) {
+                setPwm(a, 0, speed)
+                setPwm(b, 0, 0)
+            } else {
+                setPwm(a, 0, 0)
+                setPwm(b, 0, -speed)
             }
         }
         else {
-            speed = 0;
+            if (speed >= 0) {
+                setPwm(b, 0, speed)
+                setPwm(a, 0, 0)
+            } else {
+                setPwm(b, 0, 0)
+                setPwm(a, 0, -speed)
+            }
         }
     }
 
