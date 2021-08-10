@@ -295,10 +295,10 @@ namespace ICbit {
     export function ledBrightness(pin: AnalogPin, colorUnit: LED, ledstate: boolean, brightness: number = 0): void {
         if (ledstate) {
             pins.analogSetPeriod(pin, 1023)
-            pins.analogWritePin(pin, 1023 - brightness)
+            pins.analogWritePin(pin, Math.map(brightness, 1023, 0, 0, 1023))
         }
         else {
-            pins.analogWritePin(pin, 1023 - brightness)
+            pins.analogWritePin(pin, 1023)
             brightness = 1023
         }
     }
@@ -1313,7 +1313,7 @@ namespace ICbit {
         show() {
             // only supported in beta
             // ws2812b.setBufferMode(this.pin, this._mode);
-            // ws2812b.sendBuffer(this.buf, this.pin);
+            ws2812b.sendBuffer(this.buf, this.pin);
         }
 
         /**
