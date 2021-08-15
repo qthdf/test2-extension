@@ -287,7 +287,7 @@ namespace ICbit {
     /**
     * toggle led
     */
-    //% blockId=LED block="红色 LED %pin 切换到 $ledstate || 亮度 %brightness"
+    //% blockId=LEDR block="红色 LED %pin 切换到 $ledstate || 亮度 %brightness"
     //% brightness.min=0 brightness.max=1023
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
@@ -306,7 +306,7 @@ namespace ICbit {
     /**
     * toggle led
     */
-    //% blockId=LED block="绿色 LED %pin 切换到 $ledstate || 亮度 %brightness"
+    //% blockId=LEDG block="绿色 LED %pin 切换到 $ledstate || 亮度 %brightness"
     //% brightness.min=0 brightness.max=1023
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
@@ -325,7 +325,7 @@ namespace ICbit {
     /**
     * toggle led
     */
-    //% blockId=LED block="蓝色 LED %pin 切换到 $ledstate || 亮度 %brightness"
+    //% blockId=LEDB block="蓝色 LED %pin 切换到 $ledstate || 亮度 %brightness"
     //% brightness.min=0 brightness.max=1023
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
@@ -344,7 +344,7 @@ namespace ICbit {
     /**
     * toggle led
     */
-    //% blockId=LED block="黄色 LED %pin 切换到 $ledstate || 亮度 %brightness"
+    //% blockId=LEDY block="黄色 LED %pin 切换到 $ledstate || 亮度 %brightness"
     //% brightness.min=0 brightness.max=1023
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
