@@ -287,12 +287,69 @@ namespace ICbit {
     /**
     * toggle led
     */
-    //% blockId=LED block="LED %pin 颜色 %LED 切换到 $ledstate || 亮度 %brightness"
+    //% blockId=LED block="红色 LED %pin 切换到 $ledstate || 亮度 %brightness"
     //% brightness.min=0 brightness.max=1023
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
     //% subcategory=执行器
-    export function ledBrightness(pin: AnalogPin, colorUnit: LED, ledstate: boolean, brightness: number = 0): void {
+    export function ledRBrightness(pin: AnalogPin, ledstate: boolean, brightness: number = 1023): void {
+        if (ledstate) {
+            pins.analogSetPeriod(pin, 1023)
+            pins.analogWritePin(pin, Math.map(brightness, 1023, 0, 0, 1023))
+        }
+        else {
+            pins.analogWritePin(pin, 1023)
+            brightness = 1023
+        }
+    }
+
+    /**
+    * toggle led
+    */
+    //% blockId=LED block="绿色 LED %pin 切换到 $ledstate || 亮度 %brightness"
+    //% brightness.min=0 brightness.max=1023
+    //% ledstate.shadow="toggleOnOff"
+    //% expandableArgumentMode="toggle"
+    //% subcategory=执行器
+    export function ledGBrightness(pin: AnalogPin, ledstate: boolean, brightness: number = 1023): void {
+        if (ledstate) {
+            pins.analogSetPeriod(pin, 1023)
+            pins.analogWritePin(pin, Math.map(brightness, 1023, 0, 0, 1023))
+        }
+        else {
+            pins.analogWritePin(pin, 1023)
+            brightness = 1023
+        }
+    }
+
+    /**
+    * toggle led
+    */
+    //% blockId=LED block="蓝色 LED %pin 切换到 $ledstate || 亮度 %brightness"
+    //% brightness.min=0 brightness.max=1023
+    //% ledstate.shadow="toggleOnOff"
+    //% expandableArgumentMode="toggle"
+    //% subcategory=执行器
+    export function ledBBrightness(pin: AnalogPin, ledstate: boolean, brightness: number = 1023): void {
+        if (ledstate) {
+            pins.analogSetPeriod(pin, 1023)
+            pins.analogWritePin(pin, Math.map(brightness, 1023, 0, 0, 1023))
+        }
+        else {
+            pins.analogWritePin(pin, 1023)
+            brightness = 1023
+        }
+    }
+
+    /**
+    * toggle led
+    */
+    //% blockId=LED block="黄色 LED %pin 切换到 $ledstate || 亮度 %brightness"
+    //% brightness.min=0 brightness.max=1023
+    //% ledstate.shadow="toggleOnOff"
+    //% expandableArgumentMode="toggle"
+    //% subcategory=执行器
+    export function ledYBrightness(pin: AnalogPin, ledstate: boolean, brightness: number = 1023): void {
         if (ledstate) {
             pins.analogSetPeriod(pin, 1023)
             pins.analogWritePin(pin, Math.map(brightness, 1023, 0, 0, 1023))
