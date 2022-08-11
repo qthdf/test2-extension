@@ -1,8 +1,21 @@
-/**
- * Use this file to define custom functions and blocks.
- * Read more at https://pxt.microbit.org/blocks/custom
- */
-
+declare const enum LEDToRead {
+    //% block="Red" enumval=1
+    Red = 1,
+    //% block="Infrared" enumval=2
+    Infrared = 2,
+}
+declare const enum HeartbeatType {
+    //% block="BPM" enumval=0
+    BPM = 0,
+    //% block="AVG" enumval=1
+    AVG = 1,
+}
+declare const enum LEDMode {
+    //% block="Red" enumval=2
+    RedLED = 2,
+    //% block="Red & Infrared" enumval=3
+    RedAndIR = 3,
+}
 enum PingUnit {
     //% block="微秒"
     MicroSeconds,
@@ -11,7 +24,27 @@ enum PingUnit {
     //% block="英寸"
     Inches
 }
-
+enum PINs {
+    P0,
+    P1,
+    P2,
+    P3,
+    P4,
+    P5,
+    P6,
+    P7,
+    P8,
+    P9,
+    P10,
+    P11,
+    P12,
+    P13,
+    P14,
+    P15,
+    P16,
+    P19,
+    P20
+}
 enum TMP36Type {
     //% block="(℃)" enumval=0
     TMP36_temperature_C,
@@ -19,7 +52,6 @@ enum TMP36Type {
     //% block="(℉)" enumval=1
     TMP36_temperature_F,
 }
-
 enum RGB {
     //% block="红"
     RED,
@@ -30,8 +62,6 @@ enum RGB {
     //% block="全部"
     CLEAR
 }
-
-
 enum NeoPixelColors {
     //% block=红
     Red = 0xFF0000,
@@ -62,9 +92,7 @@ enum NeoPixelMode {
     //% block="RGB (RGB 格式)"
     RGB_RGB = 3
 }
-
-//% color="#eb834b" icon="\uf085" block="IC:bit"
-namespace ICbit {
+namespace Microbit {
 
     export enum DHT11_state {
         //% block="温度(℃)" enumval=0
@@ -82,16 +110,75 @@ namespace ICbit {
         Distance_Unit_inch,
     }
 
-    export enum LED {
-        //% block="红"
-        RED,
-        //% block="绿"
-        GREEN,
-        //% block="蓝"
-        BLUE,
-        //% block="黄"
-        YELLOW
+
+
+
+
+
+    //% weight=30 
+    //% blockId="gatorParticle_begin" 
+    //% block="心率血氧传感器初始化"
+    //% group="心率血氧传感器" subcategory=传感器
+    //% shim=gatorParticle::begin
+    export function begin() {
+        return
     }
+
+    /**
+    * Reads either the Red or Infrared detection channels
+    */
+    //% weight=29 
+    //% blockId="gatorParticle_color" 
+    //% block="获取 %LEDToRead 值"
+    //% group="心率血氧传感器" subcategory=传感器
+    //% shim=gatorParticle::color
+    export function color(type: LEDToRead): number {
+        return 0
+    }
+
+    /**
+    * Set which LED's we want the sensor to update and read.
+    */
+    //% weight=28
+    //% blockId="gatorParticle_setReadMode"
+    //% block="设置LED的读取模式 %LEDMode"
+    //% group="心率血氧传感器" subcategory=传感器
+    //% shim=gatorParticle::setReadMode
+
+    export function setReadMode(mode: LEDMode) {
+        return
+    }
+
+    /**
+    * Set the amplitude of either Red or Infrared LED
+    */
+    //% weight=27
+    //% blockId="gatorParticle_setAmplitude"
+    //% block="将强度从 %LEDToRead | 设置为 %myBrightness"
+    //% group="心率血氧传感器" subcategory=传感器
+    //% shim=gatorParticle::setAmplitude
+
+    export function setAmplitude(led: LEDToRead, myBrightness: number) {
+        return
+    }
+
+    /**
+    * Grab the heartbeat from the sensor in either beats per minute, or an average of the last 4 BPM readings.
+    */
+    //% weight=26
+    //% blockId="gatorParticle_heartbeat"
+    //% block="设置心跳检测方式为%HeartbeatType"
+    //% group="心率血氧传感器" subcategory=传感器
+    //% shim=gatorParticle::heartbeat
+    export function heartbeat(type: HeartbeatType): number {
+        return 0
+    }
+
+
+
+
+
+
 
     //% blockId="readsoilmoisture" block="土壤湿度传感器 %soilhumiditypin"
     //% subcategory=传感器
@@ -108,8 +195,7 @@ namespace ICbit {
         soilmoisture = voltage;
         return Math.round(soilmoisture);
     }
-
-    //% blockId="readlightintensity" block="光线传感器 %lightintensitypin"
+    //% blockId="readlightintensity" block="光敏传感器 %lightintensitypin"
     //% subcategory=传感器
     export function ReadLightIntensity(lightintensitypin: AnalogPin): number {
         let voltage2 = 0;
@@ -124,120 +210,6 @@ namespace ICbit {
         lightintensity = voltage2;
         return Math.round(1023 - lightintensity);
     }
-
-    //% blockId="readnoise" block="声音传感器 %noisepin"
-    //% subcategory=传感器
-    export function ReadNoise(noisepin: AnalogPin): number {
-        let level = 0
-        let voltage3 = 0
-        let noise = 0
-        let h = 0
-        let l = 0
-        let sumh = 0
-        let suml = 0
-        pins.digitalWritePin(DigitalPin.P0, 0)
-        for (let i = 0; i < 1000; i++) {
-            level = level + pins.analogReadPin(noisepin)
-        }
-        level = level / 1000
-        for (let j = 0; j < 1000; j++) {
-            voltage3 = pins.analogReadPin(noisepin)
-            if (voltage3 >= level) {
-                h += 1
-                sumh = sumh + voltage3
-            } else {
-                l += 1
-                suml = suml + voltage3
-            }
-        }
-        if (h == 0) {
-            sumh = level
-        } else {
-            sumh = sumh / h
-        }
-        if (l == 0) {
-            suml = level
-        } else {
-            suml = suml / l
-        }
-        noise = sumh - suml
-        if (noise <= 4) {
-            noise = pins.map(
-                noise,
-                0,
-                4,
-                30,
-                50
-            )
-        } else if (noise <= 8) {
-            noise = pins.map(
-                noise,
-                4,
-                8,
-                50,
-                55
-            )
-        } else if (noise <= 14) {
-            noise = pins.map(
-                noise,
-                9,
-                14,
-                55,
-                60
-            )
-        } else if (noise <= 32) {
-            noise = pins.map(
-                noise,
-                15,
-                32,
-                60,
-                70
-            )
-        } else if (noise <= 60) {
-            noise = pins.map(
-                noise,
-                33,
-                60,
-                70,
-                75
-            )
-        } else if (noise <= 100) {
-            noise = pins.map(
-                noise,
-                61,
-                100,
-                75,
-                80
-            )
-        } else if (noise <= 150) {
-            noise = pins.map(
-                noise,
-                101,
-                150,
-                80,
-                85
-            )
-        } else if (noise <= 231) {
-            noise = pins.map(
-                noise,
-                151,
-                231,
-                85,
-                90
-            )
-        } else {
-            noise = pins.map(
-                noise,
-                231,
-                1023,
-                90,
-                120
-            )
-        }
-        noise = Math.round(noise)
-        return Math.round(noise)
-    }
-
     /**
     * toggle fans
     */
@@ -264,7 +236,7 @@ namespace ICbit {
     //% distance_unit.fieldEditor="gridpicker"
     //% distance_unit.fieldOptions.columns=2
     //% subcategory=传感器
-    //% blockId=sonar_ping block="ping trig %trig echo %echo 单位 %unit"
+    //% blockId=sonar_ping block="超声波传感器 echo %echo trig %trig 单位 %unit"
     export function ping(trig: DigitalPin, echo: DigitalPin, unit: PingUnit, maxCmDistance = 500): number {
         // send pulse
         pins.setPull(trig, PinPullMode.PullNone);
@@ -384,8 +356,8 @@ namespace ICbit {
     export enum enMotors {
         M1 = 8,
         M2 = 10,
-        M3 = 13,
-        M4 = 15
+        M3 = 12,
+        M4 = 14
     }
 
     function i2cwrite(addr: number, reg: number, value: number) {
@@ -404,7 +376,6 @@ namespace ICbit {
     function initPCA9685(): void {
         i2cwrite(PCA9685_ADD, MODE1, 0x00)
         setFreq(50);
-        initialized = true
     }
 
     function setFreq(freq: number): void {
@@ -438,37 +409,16 @@ namespace ICbit {
         pins.i2cWriteBuffer(PCA9685_ADD, buf2);
     }
 
-    //% blockId=SuperBit_Servo block="舵机(180°)| %num|角度 %value"
-    //% num.min=1 num.max=4 value.min=0 value.max=180
+    //% blockId=SuperBit_Servo4 block="Geek舵机| %num|角度 %value"
+    //% num.min=1 num.max=4 value.min=0 value.max=300
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=20
     //% subcategory=执行器
-    export function Servo(num: enServo, value: number): void {
+    export function Servo4(num: enServo, value: number): void {
 
         // 50hz: 20,000 us
-        let us = (value * 1800 / 180 + 600); // 0.6 ~ 2.4
+        let us = (value * 1800 * 0.6 / 180 + 600); // 0.6 ~ 2.4
         let pwm = us * 4096 / 20000;
         setPwm(num, 0, pwm);
-
-    }
-
-    //% blockId=SuperBit_Servo3 block="舵机(360°)| %num|姿态 %pos|角度 %value"
-    //% num.min=1 num.max=4 value.min=0 value.max=90
-    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=20
-    //% subcategory=执行器
-    export function Servo3(num: enServo, pos: enPos, value: number): void {
-
-        // 50hz: 20,000 us
-
-        if (pos == enPos.stop) {
-            let us = (86 * 1800 / 180 + 600); // 0.6 ~ 2.4
-            let pwm = us * 4096 / 20000;
-            setPwm(num, 0, pwm);
-        }
-        else if (pos == enPos.forward) { //0-90 -> 90 - 0
-            let us = ((90 - value) * 1800 / 180 + 600); // 0.6 ~ 2.4
-            let pwm = us * 4096 / 20000;
-            setPwm(num, 0, pwm);
-        }
 
     }
 
@@ -526,6 +476,33 @@ namespace ICbit {
             force = 0
         }
     }
+    //% blockId="pinpullup" block="巡线传感器 %pin 引脚为上拉"
+    //% subcategory=执行器
+    export function pinpullup(pin: PINs): void {
+        switch (pin) {
+            case PINs.P0: pins.setPull(DigitalPin.P0, PinPullMode.PullUp);
+            case PINs.P1: pins.setPull(DigitalPin.P1, PinPullMode.PullUp);
+            case PINs.P2: pins.setPull(DigitalPin.P2, PinPullMode.PullUp);
+            case PINs.P3: pins.setPull(DigitalPin.P3, PinPullMode.PullUp);
+            case PINs.P4: pins.setPull(DigitalPin.P4, PinPullMode.PullUp);
+            case PINs.P5: pins.setPull(DigitalPin.P5, PinPullMode.PullUp);
+            case PINs.P6: pins.setPull(DigitalPin.P6, PinPullMode.PullUp);
+            case PINs.P7: pins.setPull(DigitalPin.P7, PinPullMode.PullUp);
+            case PINs.P8: pins.setPull(DigitalPin.P8, PinPullMode.PullUp);
+            case PINs.P9: pins.setPull(DigitalPin.P9, PinPullMode.PullUp);
+            case PINs.P10: pins.setPull(DigitalPin.P10, PinPullMode.PullUp);
+            case PINs.P11: pins.setPull(DigitalPin.P11, PinPullMode.PullUp);
+            case PINs.P12: pins.setPull(DigitalPin.P12, PinPullMode.PullUp);
+            case PINs.P13: pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
+            case PINs.P14: pins.setPull(DigitalPin.P14, PinPullMode.PullUp);
+            case PINs.P15: pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
+            case PINs.P16: pins.setPull(DigitalPin.P16, PinPullMode.PullUp);
+            case PINs.P19: pins.setPull(DigitalPin.P19, PinPullMode.PullUp);
+            case PINs.P20: pins.setPull(DigitalPin.P20, PinPullMode.PullUp);
+        }
+
+
+    }
 
     //% blockId="laser_controller" block="激光 %pin 切换至 %laserState || 激光 %intensity"
     //% laserState.shadow="toggleOnOff"
@@ -547,81 +524,171 @@ namespace ICbit {
     //% blockId="octopus_ReadWaterLevel" block="水位传感器 %waterlevelpin"
     //% subcategory=传感器
     export function ReadWaterLevel(waterlevelpin: AnalogPin): number {
-        let voltage = 0;
+        let voltage4 = 0;
         let waterLevel = 0;
-        voltage = pins.map(
+        voltage4 = pins.map(
             pins.analogReadPin(waterlevelpin),
             0,
             1023,
             0,
             1023
         );
-        waterLevel = voltage;
+        waterLevel = voltage4;
         return Math.round(waterLevel);
     }
 
     //% blockId="ReadGasConcentration" block="可燃气体传感器 %gasconcentrationpin"
     //% subcategory=传感器
     export function ReadGasConcentration(gasconcentrationpin: AnalogPin): number {
-        let voltage = 0;
+        let voltage5 = 0;
         let gasConcentration = 0;
-        voltage = pins.map(
+        voltage5 = pins.map(
             pins.analogReadPin(gasconcentrationpin),
             0,
             1023,
             0,
             1023
         );
-        gasConcentration = voltage;
+        gasConcentration = voltage5;
         return Math.round(gasConcentration);
     }
 
     //% blockId="Readflame" block="火焰传感器 %flamepin"
     //% subcategory=传感器
     export function Readflame(flamepin: AnalogPin): number {
-        let voltage = 0;
+        let voltage6 = 0;
         let flame = 0;
-        voltage = pins.map(
+        voltage6 = pins.map(
             pins.analogReadPin(flamepin),
             0,
             1023,
             0,
             1023
         );
-        flame = voltage;
+        flame = voltage6;
         return Math.round(flame);
     }
 
     //% blockId="ReadGrayLevel" block="灰度传感器 %graylevelpin"
     //% subcategory=传感器
     export function ReadGrayLevel(graylevelpin: AnalogPin): number {
-        let voltage = 0;
+        let voltage7 = 0;
         let grayLevel = 0;
-        voltage = pins.map(
+        voltage7 = pins.map(
             pins.analogReadPin(graylevelpin),
             0,
             1023,
             80,
             1023
         );
-        grayLevel = voltage;
+        grayLevel = voltage7;
         return Math.round(grayLevel);
     }
 
     //% blockId="readWaterTemp" block="防水温度传感器 %waterproofpin"
     //% subcategory=传感器
     export function readWaterTemp(waterproofpin: AnalogPin): number {
-        let voltage2 = 0;
+        let voltage22 = 0;
         let waterProofTemp = 0;
-        voltage2 = pins.map(
-            pins.analogReadPin(waterproofpin),
-            0,
-            1023,
-            0,
-            1023
-        );
-        waterProofTemp = voltage2;
-        return Math.round(1023 - waterProofTemp);
+        voltage22 = pins.analogReadPin(waterproofpin);//%获得原始值
+        if (voltage22 > 1001) { waterProofTemp = 100; }
+        else if (voltage22 > 1000) { waterProofTemp = 98; }
+        else if (voltage22 > 999) { waterProofTemp = 97; }
+        else if (voltage22 > 998) { waterProofTemp = 96; }
+        else if (voltage22 > 997) { waterProofTemp = 95; }
+        else if (voltage22 > 996) { waterProofTemp = 93; }
+        else if (voltage22 > 995) { waterProofTemp = 92; }
+        else if (voltage22 > 994) { waterProofTemp = 91; }
+        else if (voltage22 > 993) { waterProofTemp = 90; }
+        else if (voltage22 > 992) { waterProofTemp = 89; }
+        else if (voltage22 > 991) { waterProofTemp = 88; }
+        else if (voltage22 > 990) { waterProofTemp = 87; }
+        else if (voltage22 > 989) { waterProofTemp = 86; }
+        else if (voltage22 > 988) { waterProofTemp = 85; }
+        else if (voltage22 > 987) { waterProofTemp = 84; }
+        else if (voltage22 > 986) { waterProofTemp = 83; }
+        else if (voltage22 > 985) { waterProofTemp = 82; }
+        else if (voltage22 > 984) { waterProofTemp = 81; }
+        else if (voltage22 > 982) { waterProofTemp = 80; }
+        else if (voltage22 > 981) { waterProofTemp = 79; }
+        else if (voltage22 > 980) { waterProofTemp = 78; }
+        else if (voltage22 > 978) { waterProofTemp = 77; }
+        else if (voltage22 > 977) { waterProofTemp = 76; }
+        else if (voltage22 > 975) { waterProofTemp = 75; }
+        else if (voltage22 > 974) { waterProofTemp = 74; }
+        else if (voltage22 > 972) { waterProofTemp = 73; }
+        else if (voltage22 > 971) { waterProofTemp = 72; }
+        else if (voltage22 > 969) { waterProofTemp = 71; }
+        else if (voltage22 > 967) { waterProofTemp = 70; }
+        else if (voltage22 > 965) { waterProofTemp = 69; }
+        else if (voltage22 > 963) { waterProofTemp = 68; }
+        else if (voltage22 > 961) { waterProofTemp = 67; }
+        else if (voltage22 > 959) { waterProofTemp = 66; }
+        else if (voltage22 > 957) { waterProofTemp = 65; }
+        else if (voltage22 > 955) { waterProofTemp = 64; }
+        else if (voltage22 > 953) { waterProofTemp = 63; }
+        else if (voltage22 > 950) { waterProofTemp = 62; }
+        else if (voltage22 > 948) { waterProofTemp = 61; }
+        else if (voltage22 > 943) { waterProofTemp = 59; }
+        else if (voltage22 > 940) { waterProofTemp = 58; }
+        else if (voltage22 > 937) { waterProofTemp = 57; }
+        else if (voltage22 > 934) { waterProofTemp = 56; }
+        else if (voltage22 > 931) { waterProofTemp = 55; }
+        else if (voltage22 > 928) { waterProofTemp = 54; }
+        else if (voltage22 > 924) { waterProofTemp = 53; }
+        else if (voltage22 > 921) { waterProofTemp = 52; }
+        else if (voltage22 > 917) { waterProofTemp = 51; }
+        else if (voltage22 > 914) { waterProofTemp = 51; }
+        else if (voltage22 > 910) { waterProofTemp = 49; }
+        else if (voltage22 > 906) { waterProofTemp = 48; }
+        else if (voltage22 > 902) { waterProofTemp = 47; }
+        else if (voltage22 > 898) { waterProofTemp = 46; }
+        else if (voltage22 > 893) { waterProofTemp = 45; }
+        else if (voltage22 > 889) { waterProofTemp = 44; }
+        else if (voltage22 > 884) { waterProofTemp = 43; }
+        else if (voltage22 > 879) { waterProofTemp = 42; }
+        else if (voltage22 > 874) { waterProofTemp = 41; }
+        else if (voltage22 > 869) { waterProofTemp = 40; }
+        else if (voltage22 > 864) { waterProofTemp = 39; }
+        else if (voltage22 > 858) { waterProofTemp = 38; }
+        else if (voltage22 > 852) { waterProofTemp = 37; }
+        else if (voltage22 > 846) { waterProofTemp = 36; }
+        else if (voltage22 > 840) { waterProofTemp = 35; }
+        else if (voltage22 > 834) { waterProofTemp = 34; }
+        else if (voltage22 > 827) { waterProofTemp = 33; }
+        else if (voltage22 > 821) { waterProofTemp = 32; }
+        else if (voltage22 > 814) { waterProofTemp = 31; }
+        else if (voltage22 > 806) { waterProofTemp = 30; }
+        else if (voltage22 > 799) { waterProofTemp = 29; }
+        else if (voltage22 > 791) { waterProofTemp = 28; }
+        else if (voltage22 > 784) { waterProofTemp = 27; }
+        else if (voltage22 > 776) { waterProofTemp = 26; }
+        else if (voltage22 > 767) { waterProofTemp = 25; }
+        else if (voltage22 > 759) { waterProofTemp = 24; }
+        else if (voltage22 > 750) { waterProofTemp = 23; }
+        else if (voltage22 > 741) { waterProofTemp = 22; }
+        else if (voltage22 > 732) { waterProofTemp = 21; }
+        else if (voltage22 > 713) { waterProofTemp = 19; }
+        else if (voltage22 > 703) { waterProofTemp = 18; }
+        else if (voltage22 > 692) { waterProofTemp = 17; }
+        else if (voltage22 > 682) { waterProofTemp = 16; }
+        else if (voltage22 > 671) { waterProofTemp = 15; }
+        else if (voltage22 > 661) { waterProofTemp = 14; }
+        else if (voltage22 > 650) { waterProofTemp = 13; }
+        else if (voltage22 > 638) { waterProofTemp = 12; }
+        else if (voltage22 > 627) { waterProofTemp = 11; }
+        else if (voltage22 > 615) { waterProofTemp = 10; }
+        else if (voltage22 > 604) { waterProofTemp = 9; }
+        else if (voltage22 > 592) { waterProofTemp = 8; }
+        else if (voltage22 > 579) { waterProofTemp = 7; }
+        else if (voltage22 > 567) { waterProofTemp = 6; }
+        else if (voltage22 > 555) { waterProofTemp = 5; }
+        else if (voltage22 > 542) { waterProofTemp = 4; }
+        else if (voltage22 > 530) { waterProofTemp = 3; }
+        else if (voltage22 > 517) { waterProofTemp = 2; }
+        else if (voltage22 > 504) { waterProofTemp = 1; }
+        else { waterProofTemp = 0; }
+        return waterProofTemp;
     }
 
     //% blockId=potentiometerRead
@@ -635,14 +702,36 @@ namespace ICbit {
     //% block="按钮传感器 %pin"
     //% subcategory=传感器
     export function buttonState(pin: DigitalPin): number {
+
         return pins.digitalReadPin(pin);
     }
-
-    //% blockId=closeState
-    //% block="近距离光电传感器 %pin"
+    //% blockId=followState
+    //% block="巡线传感器 %pin"
     //% subcategory=传感器
-    export function closeState(pin: DigitalPin): number {
-        return pins.digitalReadPin(pin);
+    export function followState(pin: PINs): number {
+        switch (pin) {
+            case PINs.P0: return pins.digitalReadPin(DigitalPin.P0);
+            case PINs.P1: return pins.digitalReadPin(DigitalPin.P1);
+            case PINs.P2: return pins.digitalReadPin(DigitalPin.P2);
+            case PINs.P3: return pins.digitalReadPin(DigitalPin.P3);
+            case PINs.P4: return pins.digitalReadPin(DigitalPin.P4);
+            case PINs.P5: return pins.digitalReadPin(DigitalPin.P5);
+            case PINs.P6: return pins.digitalReadPin(DigitalPin.P6);
+            case PINs.P7: return pins.digitalReadPin(DigitalPin.P7);
+            case PINs.P8: return pins.digitalReadPin(DigitalPin.P8);
+            case PINs.P9: return pins.digitalReadPin(DigitalPin.P9);
+            case PINs.P10: return pins.digitalReadPin(DigitalPin.P10);
+            case PINs.P11: return pins.digitalReadPin(DigitalPin.P11);
+            case PINs.P12: return pins.digitalReadPin(DigitalPin.P12);
+            case PINs.P13: return pins.digitalReadPin(DigitalPin.P13);
+            case PINs.P14: return pins.digitalReadPin(DigitalPin.P14);
+            case PINs.P15: return pins.digitalReadPin(DigitalPin.P15);
+            case PINs.P16: return pins.digitalReadPin(DigitalPin.P16);
+            case PINs.P19: return pins.digitalReadPin(DigitalPin.P19);
+            case PINs.P20: return pins.digitalReadPin(DigitalPin.P20);
+
+        }
+
     }
 
     //% blockId=farState
@@ -721,111 +810,28 @@ namespace ICbit {
     // I2C functions
 
     function I2C_WriteReg8(addr: number, reg: number, val: number) {
-        let buf = pins.createBuffer(2)
-        buf.setNumber(NumberFormat.UInt8BE, 0, reg)
-        buf.setNumber(NumberFormat.UInt8BE, 1, val)
-        pins.i2cWriteBuffer(addr, buf)
+        let buf3 = pins.createBuffer(2)
+        buf3.setNumber(NumberFormat.UInt8BE, 0, reg)
+        buf3.setNumber(NumberFormat.UInt8BE, 1, val)
+        pins.i2cWriteBuffer(addr, buf3)
     }
 
     function I2C_ReadReg8(addr: number, reg: number): number {
-        let buf = pins.createBuffer(1)
-        buf.setNumber(NumberFormat.UInt8BE, 0, reg)
-        pins.i2cWriteBuffer(addr, buf)
-        buf = pins.i2cReadBuffer(addr, 1)
-        return buf.getNumber(NumberFormat.UInt8BE, 0);
+        let buf4 = pins.createBuffer(1)
+        buf4.setNumber(NumberFormat.UInt8BE, 0, reg)
+        pins.i2cWriteBuffer(addr, buf4)
+        buf4 = pins.i2cReadBuffer(addr, 1)
+        return buf4.getNumber(NumberFormat.UInt8BE, 0);
     }
 
     function I2C_ReadReg16(addr: number, reg: number): number {
-        let buf = pins.createBuffer(1)
-        buf.setNumber(NumberFormat.UInt8BE, 0, reg)
-        pins.i2cWriteBuffer(addr, buf)
-        buf = pins.i2cReadBuffer(addr, 2)
+        let buf5 = pins.createBuffer(1)
+        buf5.setNumber(NumberFormat.UInt8BE, 0, reg)
+        pins.i2cWriteBuffer(addr, buf5)
+        buf5 = pins.i2cReadBuffer(addr, 2)
         // Little endian
-        return ((buf.getNumber(NumberFormat.UInt8BE, 1) << 8) | buf.getNumber(NumberFormat.UInt8BE, 0));
+        return ((buf5.getNumber(NumberFormat.UInt8BE, 1) << 8) | buf5.getNumber(NumberFormat.UInt8BE, 0));
     }
-
-    //% blockId="initialize_sensor" block="初始化颜色传感器"
-    //% subcategory="传感器"
-    export function LCS_initialize() {
-        // Make sure we're connected to the right sensor.
-        let chip_id = I2C_ReadReg8(LCS_Constants.ADDRESS, (LCS_Constants.COMMAND_BIT | LCS_Constants.ID))
-
-        if (chip_id != 0x44) {
-            return // Incorrect chip ID
-        }
-
-        // Set default integration time and gain.
-        LCS_set_integration_time(0.0048)
-        LCS_set_gain(LCS_Constants.GAIN_16X)
-
-        // Enable the device (by default, the device is in power down mode on bootup).
-        LCS_enable()
-    }
-
-    function LCS_enable() {
-        // Set the power and enable bits.
-        I2C_WriteReg8(LCS_Constants.ADDRESS, (LCS_Constants.COMMAND_BIT | LCS_Constants.ENABLE), LCS_Constants.ENABLE_PON)
-        basic.pause(10) // not sure if this is right    time.sleep(0.01) // FIXME delay for 10ms
-
-        I2C_WriteReg8(LCS_Constants.ADDRESS, (LCS_Constants.COMMAND_BIT | LCS_Constants.ENABLE), (LCS_Constants.ENABLE_PON | LCS_Constants.ENABLE_AEN))
-    }
-
-    function LCS_set_integration_time(time: number) {
-        let val = 0x100 - (time / 0.0024) // FIXME was cast to int type
-        if (val > 255) {
-            val = 255
-        } else if (val < 0) {
-            val = 0
-        }
-        I2C_WriteReg8(LCS_Constants.ADDRESS, (LCS_Constants.COMMAND_BIT | LCS_Constants.ATIME), val)
-        LCS_integration_time_val = val
-    }
-
-    function LCS_set_gain(gain: number) {
-        I2C_WriteReg8(LCS_Constants.ADDRESS, (LCS_Constants.COMMAND_BIT | LCS_Constants.CONTROL), gain)
-    }
-
-    function LCS_set_led_state(state: boolean) {
-        I2C_WriteReg8(LCS_Constants.ADDRESS, (LCS_Constants.COMMAND_BIT | LCS_Constants.PERS), LCS_Constants.PERS_NONE)
-        let val = I2C_ReadReg8(LCS_Constants.ADDRESS, (LCS_Constants.COMMAND_BIT | LCS_Constants.ENABLE))
-        if (state) {
-            val |= LCS_Constants.ENABLE_AIEN
-        } else {
-            val &= ~LCS_Constants.ENABLE_AIEN
-        }
-        I2C_WriteReg8(LCS_Constants.ADDRESS, (LCS_Constants.COMMAND_BIT | LCS_Constants.ENABLE), val)
-
-        basic.pause(2 * (256 - LCS_integration_time_val) * 2.4) // delay for long enough for there to be new (post-change) complete values available
-    }
-
-    //% blockId="octopus_getSensorData" block="读取颜色值 %colorId"
-    //% subcategory="传感器"
-    export function getColorData(color: RGB): number {
-        basic.pause((256 - LCS_integration_time_val) * 2.4);
-        let sum = I2C_ReadReg16(LCS_Constants.ADDRESS, (LCS_Constants.COMMAND_BIT | LCS_Constants.CDATAL));
-        let vue = 0;
-        switch (color) {
-            case RGB.RED:
-                vue = I2C_ReadReg16(LCS_Constants.ADDRESS, (LCS_Constants.COMMAND_BIT | LCS_Constants.RDATAL));
-                break;
-            case RGB.GREEN:
-                vue = I2C_ReadReg16(LCS_Constants.ADDRESS, (LCS_Constants.COMMAND_BIT | LCS_Constants.GDATAL));
-                break;
-            case RGB.BLUE:
-                vue = I2C_ReadReg16(LCS_Constants.ADDRESS, (LCS_Constants.COMMAND_BIT | LCS_Constants.BDATAL));
-                break;
-            case RGB.CLEAR:
-                return sum;
-                break;
-
-        }
-        vue = Math.floor(vue / sum * 255);
-
-        serial.writeLine("val: " + vue);
-        return vue;
-    }
-
-
     function LCS_get_raw_data(delay: boolean = false): number[] {
         if (delay) {
             // Delay for the integration time to allow reading immediately after the previous read.
@@ -1025,71 +1031,40 @@ namespace ICbit {
     }
 
     /**
-     * set pixel in OLED
-     * @param x is X alis, eg: 0
-     * @param y is Y alis, eg: 0
-     * @param color is dot color, eg: 1
-     */
-    //% blockId="OLED12864_I2C_PIXEL" block="设置 pixel 在 x %x|y %y|颜色 %color"
-    //% parts=OLED12864_I2C trackArgs=0
-    //% group="OLED显示屏" subcategory=执行器
-    //% weight=80 blockGap=10 color=#0855AA
-    export function pixel(x: number, y: number, color: number = 1) {
-        let page = y >> 3
-        let shift_page = y % 8
-        let ind = x * (_ZOOM + 1) + page * 128 + 1
-        let b = (color) ? (_screen[ind] | (1 << shift_page)) : clrbit(_screen[ind], shift_page)
-        _screen[ind] = b
-        set_pos(x, page)
-        if (_ZOOM) {
-            _screen[ind + 1] = b
-            _buf3[0] = 0x40
-            _buf3[1] = _buf3[2] = b
-            pins.i2cWriteBuffer(_I2CAddr, _buf3)
-        }
-        else {
-            _buf2[0] = 0x40
-            _buf2[1] = b
-            pins.i2cWriteBuffer(_I2CAddr, _buf2)
-        }
-    }
-
-    /**
      * show text in OLED
      * @param x is X alis, eg: 0
      * @param y is Y alis, eg: 0
      * @param s is the text will be show, eg: 'Hello!'
-     * @param color is string color, eg: 1
      */
-    //% blockId="OLED12864_I2C_SHOWSTRING" block="显示 string 在 x %x|y %y|文本 %s|颜色 %color"
+    //% blockId="OLED12864_I2C_SHOWSTRING1" block="显示 文本 在 x %x|y %y|文本 %s"
     //% parts=OLED12864_I2C trackArgs=0
     //% group="OLED显示屏" subcategory=执行器
     //% weight=80 blockGap=10 color=#0855AA
     export function showString(x: number, y: number, s: string, color: number = 1) {
-        let col = 0
-        let p = 0
-        let ind = 0
-        for (let n = 0; n < s.length; n++) {
-            p = font[s.charCodeAt(n)]
-            for (let i = 0; i < 5; i++) {
-                col = 0
-                for (let j = 0; j < 5; j++) {
-                    if (p & (1 << (5 * i + j)))
-                        col |= (1 << (j + 1))
+        let col2 = 0
+        let q = 0
+        let ind2 = 0
+        for (let r = 0; r < s.length; r++) {
+            q = font[s.charCodeAt(r)]
+            for (let k = 0; k < 5; k++) {
+                col2 = 0
+                for (let l = 0; l < 5; l++) {
+                    if (q & (1 << (5 * k + l)))
+                        col2 |= (1 << (l + 1))
                 }
-                ind = (x + n) * 5 * (_ZOOM + 1) + y * 128 + i * (_ZOOM + 1) + 1
+                ind2 = (x + r) * 5 * (_ZOOM + 1) + y * 128 + k * (_ZOOM + 1) + 1
                 if (color == 0)
-                    col = 255 - col
-                _screen[ind] = col
+                    col2 = 255 - col2
+                _screen[ind2] = col2
                 if (_ZOOM)
-                    _screen[ind + 1] = col
+                    _screen[ind2 + 1] = col2
             }
         }
         set_pos(x * 5, y)
-        let ind0 = x * 5 * (_ZOOM + 1) + y * 128
-        let buf = _screen.slice(ind0, ind + 1)
-        buf[0] = 0x40
-        pins.i2cWriteBuffer(_I2CAddr, buf)
+        let ind02 = x * 5 * (_ZOOM + 1) + y * 128
+        let buf7 = _screen.slice(ind02, ind2 + 1)
+        buf7[0] = 0x40
+        pins.i2cWriteBuffer(_I2CAddr, buf7)
     }
 
     /**
@@ -1099,7 +1074,7 @@ namespace ICbit {
      * @param num is the number will be show, eg: 12
      * @param color is number color, eg: 1
      */
-    //% blockId="OLED12864_I2C_NUMBER" block="显示 数字 在 x %x|y %y|数字 %num|颜色 %color"
+    //% blockId="OLED12864_I2C_NUMBER" block="显示 数字 在 x %x|y %y|数字 %num"
     //% parts=OLED12864_I2C trackArgs=0
     //% group="OLED显示屏" subcategory=执行器
     //% weight=80 blockGap=10 color=#0855AA
@@ -1107,13 +1082,7 @@ namespace ICbit {
         showString(x, y, num.toString(), color)
     }
 
-    /**
-     * draw / redraw screen
-     */
-    //% blockId="OLED12864_I2C_DRAW" block="画"
-    //% parts=OLED12864_I2C trackArgs=0
-    //% group="OLED显示屏" subcategory=执行器
-    //% weight=64 blockGap=10 color=#0855AA
+
     export function draw() {
         set_pos()
         pins.i2cWriteBuffer(_I2CAddr, _screen)
@@ -1248,116 +1217,30 @@ namespace ICbit {
                 this.setPixelColor(0, hsl(h1 + hStep, s1 + sStep, l1 + lStep))
             } else {
                 this.setPixelColor(0, hsl(startHue, saturation, luminance));
-                for (let i = 1; i < steps - 1; i++) {
-                    const h = Math.idiv((h1_100 + i * hStep), 100) + 360;
-                    const s = Math.idiv((s1_100 + i * sStep), 100);
-                    const l = Math.idiv((l1_100 + i * lStep), 100);
-                    this.setPixelColor(i, hsl(h, s, l));
+                for (let t = 1; t < steps - 1; t++) {
+                    const u = Math.idiv((h1_100 + t * hStep), 100) + 360;
+                    const v = Math.idiv((s1_100 + t * sStep), 100);
+                    const w = Math.idiv((l1_100 + t * lStep), 100);
+                    this.setPixelColor(t, hsl(u, v, w));
                 }
                 this.setPixelColor(steps - 1, hsl(endHue, saturation, luminance));
             }
             this.show();
         }
 
-        /**
-         * Displays a vertical bar graph based on the `value` and `high` value.
-         * If `high` is 0, the chart gets adjusted automatically.
-         * @param value current value to plot
-         * @param high maximum value, eg: 255
-         */
-        //% blockId=neopixel_show_bar_graph block="%strip|显示 柱状图 从 %value|到 %high"
-        //% icon="\uf080"
-        //% parts="neopixel" subcategory=执行器 group="彩灯"
-        //% color=#2699BF blockGap=10
-        showBarGraph(value: number, high: number): void {
-            if (high <= 0) {
-                this.clear();
-                this.setPixelColor(0, NeoPixelColors.Yellow);
-                this.show();
-                return;
-            }
-
-            value = Math.abs(value);
-            const n = this._length;
-            const n1 = n - 1;
-            let v = Math.idiv((value * n), high);
-            if (v == 0) {
-                this.setPixelColor(0, 0x666600);
-                for (let i = 1; i < n; ++i)
-                    this.setPixelColor(i, 0);
-            } else {
-                for (let i = 0; i < n; ++i) {
-                    if (i <= v) {
-                        const b = Math.idiv(i * 255, n1);
-                        this.setPixelColor(i, ICbit.rgb(b, 0, 255 - b));
-                    }
-                    else this.setPixelColor(i, 0);
-                }
-            }
-            this.show();
-        }
 
         /**
          * Set LED to a given color (range 0-255 for r, g, b).
          * You need to call ``show`` to make the changes visible.
-         * @param pixeloffset position of the NeoPixel in the strip
+         * @param pixeloffset position of the NeoPixel in the strip,eg: 1
          * @param rgb RGB color of the LED
          */
-        //% blockId="neopixel_set_pixel_color" block="%strip|设置 pixel 颜色 在 %pixeloffset|到 %rgb=neopixel_colors"
+        //% blockId="neopixel_set_pixel_color" block="%strip|设置 像素 颜色 在 %pixeloffset|到 %rgb=neopixel_colors"
         //% strip.defl=strip
         //% parts="neopixel" subcategory=执行器 group="彩灯"
         //% color=#2699BF blockGap=10
         setPixelColor(pixeloffset: number, rgb: number): void {
             this.setPixelRGB(pixeloffset >> 0, rgb >> 0);
-        }
-
-        /**
-         * Sets the number of pixels in a matrix shaped strip
-         * @param width number of pixels in a row
-         */
-        //% blockId=neopixel_set_matrix_width block="%strip|设置 矩阵 宽度 %width"
-        //% strip.defl=strip
-        //% parts="neopixel" subcategory=执行器 group="彩灯" 
-        //% color=#2699BF blockGap=10
-        setMatrixWidth(width: number) {
-            this._matrixWidth = Math.min(this._length, width >> 0);
-        }
-
-        /**
-         * Set LED to a given color (range 0-255 for r, g, b) in a matrix shaped strip
-         * You need to call ``show`` to make the changes visible.
-         * @param x horizontal position
-         * @param y horizontal position
-         * @param rgb RGB color of the LED
-         */
-        //% blockId="neopixel_set_matrix_color" block="%strip|设置 矩阵 颜色 在 x %x|y %y|到 %rgb=neopixel_colors"
-        //% strip.defl=strip
-        //% parts="neopixel" subcategory=执行器 group="彩灯"
-        //% color=#2699BF blockGap=10
-        setMatrixColor(x: number, y: number, rgb: number) {
-            if (this._matrixWidth <= 0) return; // not a matrix, ignore
-            x = x >> 0;
-            y = y >> 0;
-            rgb = rgb >> 0;
-            const cols = Math.idiv(this._length, this._matrixWidth);
-            if (x < 0 || x >= this._matrixWidth || y < 0 || y >= cols) return;
-            let i = x + y * this._matrixWidth;
-            this.setPixelColor(i, rgb);
-        }
-
-        /**
-         * For NeoPixels with RGB+W LEDs, set the white LED brightness. This only works for RGB+W NeoPixels.
-         * @param pixeloffset position of the LED in the strip
-         * @param white brightness of the white LED
-         */
-        //% blockId="neopixel_set_pixel_white" block="%strip|设置 pixel 白色 LED 在 %pixeloffset|到 %white"
-        //% strip.defl=strip
-        //% parts="neopixel" subcategory=执行器 group="彩灯"
-        //% color=#2699BF blockGap=10
-        setPixelWhiteLED(pixeloffset: number, white: number): void {
-            if (this._mode === NeoPixelMode.RGBW) {
-                this.setPixelW(pixeloffset >> 0, white >> 0);
-            }
         }
 
         /**
@@ -1387,18 +1270,6 @@ namespace ICbit {
         }
 
         /**
-         * Gets the number of pixels declared on the strip
-         */
-        //% blockId="neopixel_length" block="%strip|长度"
-        //% strip.defl=strip
-        //% weight=32
-        //% parts="neopixel" subcategory=执行器 group="彩灯"
-        //% color=#2699BF blockGap=10
-        length() {
-            return this._length;
-        }
-
-        /**
          * Set the brightness of the strip. This flag only applies to future operation.
          * @param brightness a measure of LED brightness in 0-255. eg: 255
          */
@@ -1408,91 +1279,6 @@ namespace ICbit {
         //% color=#2699BF blockGap=10
         setBrightness(brightness: number): void {
             this.brightness = brightness & 0xff;
-        }
-
-        /**
-         * Apply brightness to current colors using a quadratic easing function.
-         **/
-        //% blockId="neopixel_each_brightness" block="%strip|清除 亮度"
-        //% strip.defl=strip
-        //% parts="neopixel" subcategory=执行器 group="彩灯"
-        //% color=#2699BF blockGap=10
-        easeBrightness(): void {
-            const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-            const br = this.brightness;
-            const buf = this.buf;
-            const end = this.start + this._length;
-            const mid = Math.idiv(this._length, 2);
-            for (let i = this.start; i < end; ++i) {
-                const k = i - this.start;
-                const ledoffset = i * stride;
-                const br = k > mid
-                    ? Math.idiv(255 * (this._length - 1 - k) * (this._length - 1 - k), (mid * mid))
-                    : Math.idiv(255 * k * k, (mid * mid));
-                const r = (buf[ledoffset + 0] * br) >> 8; buf[ledoffset + 0] = r;
-                const g = (buf[ledoffset + 1] * br) >> 8; buf[ledoffset + 1] = g;
-                const b = (buf[ledoffset + 2] * br) >> 8; buf[ledoffset + 2] = b;
-                if (stride == 4) {
-                    const w = (buf[ledoffset + 3] * br) >> 8; buf[ledoffset + 3] = w;
-                }
-            }
-        }
-
-        /**
-         * Create a range of LEDs.
-         * @param start offset in the LED strip to start the range
-         * @param length number of LEDs in the range. eg: 4
-         */
-        //% blockId="neopixel_range" block="%strip|值域 从 %start|到 %length|leds"
-        //% strip.defl=strip
-        //% parts="neopixel" subcategory=执行器 group="彩灯"
-        //% blockSetVariable=range
-        //% weight= 52
-        //% color=#2699BF blockGap=10
-        range(start: number, length: number): Strip {
-            start = start >> 0;
-            length = length >> 0;
-            let strip = new Strip();
-            strip.buf = this.buf;
-            strip.pin = this.pin;
-            strip.brightness = this.brightness;
-            strip.start = this.start + Math.clamp(0, this._length - 1, start);
-            strip._length = Math.clamp(0, this._length - (strip.start - this.start), length);
-            strip._matrixWidth = 0;
-            strip._mode = this._mode;
-            return strip;
-        }
-
-        /**
-         * Shift LEDs forward and clear with zeros.
-         * You need to call ``show`` to make the changes visible.
-         * @param offset number of pixels to shift forward, eg: 1
-         */
-        //% blockId="neopixel_shift" block="%strip|移动 pixels %offset"
-        //% strip.defl=strip
-        //% parts="neopixel" subcategory=执行器 group="彩灯"
-        //% color=#2699BF blockGap=10
-        //% weight= 50
-        shift(offset: number = 1): void {
-            offset = offset >> 0;
-            const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-            this.buf.shift(-offset * stride, this.start * stride, this._length * stride)
-        }
-
-        /**
-         * Rotate LEDs forward.
-         * You need to call ``show`` to make the changes visible.
-         * @param offset number of pixels to rotate forward, eg: 1
-         */
-        //% blockId="neopixel_rotate" block="%strip|旋转 pixels %offset"
-        //% strip.defl=strip
-        //% parts="neopixel" subcategory=执行器 group="彩灯"
-        //% color=#2699BF blockGap=10
-        //% weight= 50
-        rotate(offset: number = 1): void {
-            offset = offset >> 0;
-            const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-            this.buf.rotate(-offset * stride, this.start * stride, this._length * stride)
         }
 
         /**
@@ -1506,28 +1292,7 @@ namespace ICbit {
             // don't yield to avoid races on initialization
         }
 
-        /**
-         * Estimates the electrical current (mA) consumed by the current light configuration.
-         */
-        //% blockId=neopixel_power block="%strip|电力 (mA)"
-        //% strip.defl=strip
-        //% weight=32
-        //% advanced= true
-        //% parts="neopixel" subcategory=执行器 group="彩灯"
-        //% color=#2699BF blockGap=10
-        power(): number {
-            const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-            const end = this.start + this._length;
-            let p = 0;
-            for (let i = this.start; i < end; ++i) {
-                const ledoffset = i * stride;
-                for (let j = 0; j < stride; ++j) {
-                    p += this.buf[i + j];
-                }
-            }
-            return Math.idiv(this.length() * 7, 10) /* 0.7mA per neopixel */
-                + Math.idiv(p * 480, 10000); /* rought approximation */
-        }
+
 
         private setBufferRGB(offset: number, red: number, green: number, blue: number): void {
             if (this._mode === NeoPixelMode.RGB_RGB) {
@@ -1545,31 +1310,31 @@ namespace ICbit {
             let green = unpackG(rgb);
             let blue = unpackB(rgb);
 
-            const br = this.brightness;
-            if (br < 255) {
-                red = (red * br) >> 8;
-                green = (green * br) >> 8;
-                blue = (blue * br) >> 8;
+            const br3 = this.brightness;
+            if (br3 < 255) {
+                red = (red * br3) >> 8;
+                green = (green * br3) >> 8;
+                blue = (blue * br3) >> 8;
             }
-            const end = this.start + this._length;
-            const stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-            for (let i = this.start; i < end; ++i) {
-                this.setBufferRGB(i * stride, red, green, blue)
+            const end3 = this.start + this._length;
+            const stride6 = this._mode === NeoPixelMode.RGBW ? 4 : 3;
+            for (let i5 = this.start; i5 < end3; ++i5) {
+                this.setBufferRGB(i5 * stride6, red, green, blue)
             }
         }
         private setAllW(white: number) {
             if (this._mode !== NeoPixelMode.RGBW)
                 return;
 
-            let br = this.brightness;
-            if (br < 255) {
-                white = (white * br) >> 8;
+            let br4 = this.brightness;
+            if (br4 < 255) {
+                white = (white * br4) >> 8;
             }
-            let buf = this.buf;
-            let end = this.start + this._length;
-            for (let i = this.start; i < end; ++i) {
-                let ledoffset = i * 4;
-                buf[ledoffset + 3] = white;
+            let buf8 = this.buf;
+            let end4 = this.start + this._length;
+            for (let i6 = this.start; i6 < end4; ++i6) {
+                let ledoffset3 = i6 * 4;
+                buf8[ledoffset3 + 3] = white;
             }
         }
         private setPixelRGB(pixeloffset: number, rgb: number): void {
@@ -1577,20 +1342,20 @@ namespace ICbit {
                 || pixeloffset >= this._length)
                 return;
 
-            let stride = this._mode === NeoPixelMode.RGBW ? 4 : 3;
-            pixeloffset = (pixeloffset + this.start) * stride;
+            let stride7 = this._mode === NeoPixelMode.RGBW ? 4 : 3;
+            pixeloffset = (pixeloffset + this.start) * stride7;
 
-            let red = unpackR(rgb);
-            let green = unpackG(rgb);
-            let blue = unpackB(rgb);
+            let red2 = unpackR(rgb);
+            let green2 = unpackG(rgb);
+            let blue2 = unpackB(rgb);
 
-            let br = this.brightness;
-            if (br < 255) {
-                red = (red * br) >> 8;
-                green = (green * br) >> 8;
-                blue = (blue * br) >> 8;
+            let br5 = this.brightness;
+            if (br5 < 255) {
+                red2 = (red2 * br5) >> 8;
+                green2 = (green2 * br5) >> 8;
+                blue2 = (blue2 * br5) >> 8;
             }
-            this.setBufferRGB(pixeloffset, red, green, blue)
+            this.setBufferRGB(pixeloffset, red2, green2, blue2)
         }
         private setPixelW(pixeloffset: number, white: number): void {
             if (this._mode !== NeoPixelMode.RGBW)
@@ -1602,37 +1367,37 @@ namespace ICbit {
 
             pixeloffset = (pixeloffset + this.start) * 4;
 
-            let br = this.brightness;
-            if (br < 255) {
-                white = (white * br) >> 8;
+            let br6 = this.brightness;
+            if (br6 < 255) {
+                white = (white * br6) >> 8;
             }
-            let buf = this.buf;
-            buf[pixeloffset + 3] = white;
+            let buf9 = this.buf;
+            buf9[pixeloffset + 3] = white;
         }
     }
 
     /**
      * Create a new NeoPixel driver for `numleds` LEDs.
      * @param pin the pin where the neopixel is connected.
-     * @param numleds number of leds in the strip, eg: 24,30,60,64
+     * @param numleds number of leds in the strip, eg: 8,30,60,64
      */
-    //% blockId="neopixel_create" block="NeoPixel 在 端口 %pin|用 %numleds| leds 模式 %mode"
+    //% blockId="neopixel_create" block="灯环 在 端口 %pin|用 %numleds| leds"
     //% parts="neopixel" subcategory=执行器 group="彩灯"
     //% trackArgs=0,2
     //% blockSetVariable=strip
     //% color=#2699BF blockGap=10
     //% weight=51
-    export function create(pin: DigitalPin, numleds: number, mode: NeoPixelMode): Strip {
-        let strip = new Strip();
-        let stride = mode === NeoPixelMode.RGBW ? 4 : 3;
-        strip.buf = pins.createBuffer(numleds * stride);
-        strip.start = 0;
-        strip._length = numleds;
-        strip._mode = mode || NeoPixelMode.RGB;
-        strip._matrixWidth = 0;
-        strip.setBrightness(128)
-        strip.setPin(pin)
-        return strip;
+    export function create(pin: DigitalPin, numleds: number): Strip {
+        let strip2 = new Strip();
+        let stride8 = NeoPixelMode.RGBW ? 4 : 3;
+        strip2.buf = pins.createBuffer(numleds * stride8);
+        strip2.start = 0;
+        strip2._length = numleds;
+        strip2._mode = NeoPixelMode.RGB;
+        strip2._matrixWidth = 0;
+        strip2.setBrightness(128)
+        strip2.setPin(pin)
+        return strip2;
     }
 
     /**
@@ -1665,30 +1430,20 @@ namespace ICbit {
     }
 
     function unpackR(rgb: number): number {
-        let r = (rgb >> 16) & 0xFF;
-        return r;
+        let r3 = (rgb >> 16) & 0xFF;
+        return r3;
     }
-    
+
     function unpackG(rgb: number): number {
-        let g = (rgb >> 8) & 0xFF;
-        return g;
+        let g3 = (rgb >> 8) & 0xFF;
+        return g3;
     }
 
     function unpackB(rgb: number): number {
-        let b = (rgb) & 0xFF;
-        return b;
+        let b3 = (rgb) & 0xFF;
+        return b3;
     }
 
-    /**
-     * Converts a hue saturation luminosity value into a RGB color
-     * @param h hue from 0 to 360
-     * @param s saturation from 0 to 99
-     * @param l luminosity from 0 to 99
-     */
-    //% blockId=neopixelHSL block="色度 %h|饱和度 %s|亮度 %l"
-    //% parts="neopixel" subcategory=执行器 group="彩灯"
-    //% weight=32
-    //% color=#2699BF blockGap=10
     export function hsl(h: number, s: number, l: number): number {
         h = Math.round(h);
         s = Math.round(s);
@@ -1697,32 +1452,32 @@ namespace ICbit {
         h = h % 360;
         s = Math.clamp(0, 99, s);
         l = Math.clamp(0, 99, l);
-        let c = Math.idiv((((100 - Math.abs(2 * l - 100)) * s) << 8), 10000); //chroma, [0,255]
-        let h1 = Math.idiv(h, 60);//[0,6]
-        let h2 = Math.idiv((h - h1 * 60) * 256, 60);//[0,255]
-        let temp = Math.abs((((h1 % 2) << 8) + h2) - 256);
-        let x = (c * (256 - (temp))) >> 8;//[0,255], second largest component of this color
+        let c2 = Math.idiv((((100 - Math.abs(2 * l - 100)) * s) << 8), 10000); //chroma, [0,255]
+        let h12 = Math.idiv(h, 60);//[0,6]
+        let h22 = Math.idiv((h - h12 * 60) * 256, 60);//[0,255]
+        let temp = Math.abs((((h12 % 2) << 8) + h22) - 256);
+        let x = (c2 * (256 - (temp))) >> 8;//[0,255], second largest component of this color
         let r$: number;
         let g$: number;
         let b$: number;
-        if (h1 == 0) {
-            r$ = c; g$ = x; b$ = 0;
-        } else if (h1 == 1) {
-            r$ = x; g$ = c; b$ = 0;
-        } else if (h1 == 2) {
-            r$ = 0; g$ = c; b$ = x;
-        } else if (h1 == 3) {
-            r$ = 0; g$ = x; b$ = c;
-        } else if (h1 == 4) {
-            r$ = x; g$ = 0; b$ = c;
-        } else if (h1 == 5) {
-            r$ = c; g$ = 0; b$ = x;
+        if (h12 == 0) {
+            r$ = c2; g$ = x; b$ = 0;
+        } else if (h12 == 1) {
+            r$ = x; g$ = c2; b$ = 0;
+        } else if (h12 == 2) {
+            r$ = 0; g$ = c2; b$ = x;
+        } else if (h12 == 3) {
+            r$ = 0; g$ = x; b$ = c2;
+        } else if (h12 == 4) {
+            r$ = x; g$ = 0; b$ = c2;
+        } else if (h12 == 5) {
+            r$ = c2; g$ = 0; b$ = x;
         }
-        let m = Math.idiv((Math.idiv((l * 2 << 8), 100) - c), 2);
-        let r = r$ + m;
-        let g = g$ + m;
-        let b = b$ + m;
-        return packRGB(r, g, b);
+        let m2 = Math.idiv((Math.idiv((l * 2 << 8), 100) - c2), 2);
+        let r4 = r$ + m2;
+        let g4 = g$ + m2;
+        let b4 = b$ + m2;
+        return packRGB(r4, g4, b4);
     }
 
     export enum HueInterpolationDirection {
