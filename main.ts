@@ -97,14 +97,13 @@ namespace Microbit {
 
 
 
-    // Functions for reading Particle from the gatorParticle in Particle or straight adv value
-	
-	/**
+/**
 	* Initializes the gator:particle sensor, must be called on power up
 	*/	
 	//% weight=30 
 	//% blockId="gatorParticle_begin" 
-	//% block="initialize gator:Particle sensor"
+	//% block="心率血氧传感器初始化"
+    //% subcategory=传感器
 	//% shim=Microbit::begin
 	export function begin(){
 		return
@@ -115,54 +114,26 @@ namespace Microbit {
 	*/
 	//% weight=29 
 	//% blockId="gatorParticle_color" 
-	//% block="get %LEDToRead value"
+	//% block="读取 %LEDToRead 的值"
+    //% subcategory=传感器
 	//% shim=Microbit::color
 	export function color(type: LEDToRead): number{
 		return 0
 	}
 	
-	/**
-	* Set which LED's we want the sensor to update and read.
-	*/	
-	//% weight=28
-	//% blockId="gatorParticle_setReadMode"
-	//% block="set LED mode to read %LEDMode"
-	//% shim=Microbit::setReadMode
-	//% advanced=true
-	export function setReadMode(mode: LEDMode)
-	{
-		return
-	}
-
-	/**
-	* Set the amplitude of either Red or Infrared LED
-	*/	
-	//% weight=27
-	//% blockId="gatorParticle_setAmplitude"
-	//% block="change strength of %LEDToRead | to %myBrightness"
-	//% shim=Microbit::setAmplitude
-	//% advanced=true
-	export function setAmplitude(led: LEDToRead, myBrightness: number)
-	{
-		return
-	}
 	
 	/**
 	* Grab the heartbeat from the sensor in either beats per minute, or an average of the last 4 BPM readings.
 	*/
 	//% weight=26
 	//% blockId="gatorParticle_heartbeat"
-	//% block="detect heartbeat in %HeartbeatType"
+	//% block="检测心跳 %HeartbeatType"
+    //% subcategory=传感器
 	//% shim=Microbit::heartbeat
 	export function heartbeat(type: HeartbeatType): number
 	{
 		return 0
 	}
-
-
-
-
-
 
 
     //% blockId="readsoilmoisture" block="土壤湿度传感器 %soilhumiditypin"
