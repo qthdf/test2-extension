@@ -10,7 +10,13 @@
     "files": [
         "main.blocks",
         "main.ts",
+        "heart.cpp",
+        "MAX30105.cpp",
+        "MAX30105.h",
+        "shims.d.ts",
+        "enums.d.ts",
         "README.md"
+       
     ],
     "testFiles": [
         "test.ts"
