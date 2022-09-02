@@ -32,11 +32,6 @@
     }
 
 
-    declare const enum LEDMode {
-    //% block="红光" enumval=2
-    RedLED = 2,
-    //% block="红色和红外光" enumval=3
-    RedAndIR = 3,
-    }
+    
 
 // Auto-generated. Do not edit. Really.
