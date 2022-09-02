@@ -103,7 +103,7 @@ namespace Microbit {
 	//% weight=30 
 	//% blockId="gatorParticle_begin" 
 	//% block="心率血氧传感器初始化"
-    //% subcategory=传感器
+        //% subcategory=传感器
 	//% shim=Microbit::begin
 	export function begin(){
 		return
@@ -115,7 +115,7 @@ namespace Microbit {
 	//% weight=29 
 	//% blockId="gatorParticle_color" 
 	//% block="读取 %LEDToRead 的值"
-    //% subcategory=传感器
+        //% subcategory=传感器
 	//% shim=Microbit::color
 	export function color(type: LEDToRead): number{
 		return 0
@@ -128,12 +128,22 @@ namespace Microbit {
 	//% weight=26
 	//% blockId="gatorParticle_heartbeat"
 	//% block="检测心跳 %HeartbeatType"
-    //% subcategory=传感器
+        //% subcategory=传感器
 	//% shim=Microbit::heartbeat
 	export function heartbeat(type: HeartbeatType): number
 	{
 		return 0
 	}
+	//% weight=23
+	//% blockId="gatorParticle_spo2t"
+	//% block="检测血氧 "
+        //% subcategory=传感器
+	//% shim=Microbit::heartbeat
+	export function spo2(): number
+	{
+		return 0
+	}
+
 
 
     //% blockId="readsoilmoisture" block="土壤湿度传感器 %soilhumiditypin"
