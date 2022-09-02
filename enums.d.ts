@@ -17,17 +17,17 @@
      */
 
     declare const enum LEDToRead {
-    //% block="红色光" enumval=1
+    //% block="Red" enumval=1
     Red = 1,
-    //% block="红外线" enumval=2
+    //% block="Infrared" enumval=2
     Infrared = 2,
     }
 
 
     declare const enum HeartbeatType {
-    //% block="每分钟的心率" enumval=0
+    //% block="BPM" enumval=0
     BPM = 0,
-    //% block="平均心率" enumval=1
+    //% block="AVG" enumval=1
     AVG = 1,
     }
 
