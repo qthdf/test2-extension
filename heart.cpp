@@ -34,12 +34,7 @@ enum HeartbeatType{
 	AVG=1,
 };
 
-enum LEDMode{
-	//% block="Red" enumval=2
-	RedLED=2,
-	//% block="Red & Infrared" enumval=3
-	RedAndIR=3,
-};
+
 
 using namespace pxt;
 
