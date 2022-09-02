@@ -20,7 +20,7 @@
 
 int16_t placeholder;
 
-static const char MAX30105_ADDRESS = 0xAE;
+static const char MAX30105_ADDRESS = 0x57;
 
 
 // Status Registers
