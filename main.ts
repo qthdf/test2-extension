@@ -138,7 +138,7 @@ namespace Microbit {
 	//% blockId="gatorParticle_spo2t"
 	//% block="检测血氧 "
         //% subcategory=传感器
-	//% shim=Microbit::heartbeat
+	//% shim=Microbit::spo2
 	export function spo2(): number
 	{
 		return 0
